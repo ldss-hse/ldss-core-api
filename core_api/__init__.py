@@ -3,9 +3,11 @@ from pathlib import Path
 from dynaconf import FlaskDynaconf
 from flask import Flask
 from flask_cors import CORS
+from flask_pydantic_spec import FlaskPydanticSpec
 
 from core_api.constants import ROOT_PATH
 from core_api.extensions.database import init_db
+from core_api.extensions.pydantic_spec import PYDANTIC_VALIDATOR
 
 
 def create_app() -> Flask:
@@ -19,6 +21,8 @@ def configure_app(app: Flask):
     FlaskDynaconf(app, settings_files=["settings.toml", ".secrets.toml"])
 
     CORS(app)
+
+    PYDANTIC_VALIDATOR.register(app)
 
     init_db(app)
 

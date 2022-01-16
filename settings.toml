@@ -1,0 +1,11 @@
+name = "CORE API Flask Application Settings"
+
+[default]
+DEBUG = true
+COMMON_EXAMPLE = 'example of common setting'
+
+[development]
+DB_URI = 'development URI'
+
+[production]
+DB_URI = 'production URI'

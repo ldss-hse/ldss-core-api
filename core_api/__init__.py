@@ -1,5 +1,5 @@
+from dynaconf import FlaskDynaconf
 from flask import Flask
-from flask_restful import Api
 
 
 def create_app() -> Flask:
@@ -13,5 +13,7 @@ def create_app() -> Flask:
 
     app.register_blueprint(V1_API_BLUEPRINT, url_prefix=url_prefix)
     app.register_blueprint(V1_ROOT_API_BLUEPRINT, url_prefix='/')
+
+    FlaskDynaconf(app, settings_files=["settings.toml", ".secrets.toml"])
 
     return app

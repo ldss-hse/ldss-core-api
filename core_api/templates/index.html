@@ -27,12 +27,41 @@
             });
     }
 
+    function postNewTask() {
+        const createNewTaskRequestPayloadField = document.getElementById('createNewTaskRequestPayloadField');
+        const payload = JSON.parse(createNewTaskRequestPayloadField.value);
+        const config = {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: {
+                "content-type": "application/json"
+            }
+        };
+        fetch(`${apiURL}/tasks`, config)
+            .then((res) => res.json())
+            .then((res) => {
+                const prettyJSON = JSON.stringify(res, null, 2);
+                const createNewTaskResultField = document.getElementById('createNewTaskResultField');
+                createNewTaskResultField.innerHTML = prettyJSON;
+            })
+            .catch((err) => {
+                const createNewTaskResultField = document.getElementById('createNewTaskResultField');
+                createNewTaskResultField.innerHTML = 'Error! ' + err;
+            });
+    }
+
     function init() {
         const acknowledgeButton = document.getElementById('acknowledgeButton');
+        const createNewTaskButton = document.getElementById('createNewTaskButton');
 
         acknowledgeButton.addEventListener('click', function (event) {
             event.preventDefault();
             requestTasksInfo();
+        });
+
+        createNewTaskButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            postNewTask();
         });
     }
 </script>
@@ -45,7 +74,7 @@
 
     .ack-result {
         margin: 30px 0 30px 0;
-        height: 210px;
+        height: 110px;
     }
 
     .in-card-element-margins {
@@ -77,6 +106,36 @@
                 <span class="input-group-text">Result</span>
             </div>
             <textarea class="form-control" aria-label="With textarea" id="acknowledgeResultField"></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="card card-for-poc">
+    <h5 class="card-header">Perform a task</h5>
+    <div class="card-body">
+        <h5 class="card-title">Create a new task</h5>
+        <p class="card-text">Checking Flask DB is working.</p>
+        <div class="input-group ack-result">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Request payload</span>
+            </div>
+            <textarea class="form-control" aria-label="With textarea"
+                      id="createNewTaskRequestPayloadField">{ "taskName": "make decision" }</textarea>
+        </div>
+        <button type="button" class="btn btn-outline-primary" id="createNewTaskButton">Create</button>
+        <div class="progress-block in-card-element-margins">
+            <div class="progress" style="height: 20px; display: none">
+                <div class="progress-bar" style="width: 0%;" id="createNewTaskProgressBar" role="progressbar"
+                     aria-valuenow=""
+                     aria-valuemin="0"
+                     aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div class="input-group ack-result">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Result</span>
+            </div>
+            <textarea class="form-control" aria-label="With textarea" id="createNewTaskResultField"></textarea>
         </div>
     </div>
 </div>

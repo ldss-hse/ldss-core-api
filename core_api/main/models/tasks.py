@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 
 from core_api.extensions.database import Base
 
@@ -8,6 +8,7 @@ class TasksModel(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
+    is_cancelled=Column(Boolean(), default=False)
 
     def __init__(self, name=None):
         self.name = name

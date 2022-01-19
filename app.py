@@ -1,3 +1,5 @@
+"""Root module for the Flask application"""
+
 from core_api import create_app, configure_app, register_api_blueprints
 
 APP = create_app()

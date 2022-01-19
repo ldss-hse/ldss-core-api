@@ -1,3 +1,7 @@
+"""
+A module for creating a blueprint for tasks REST API
+"""
+
 from flask import Blueprint
 from flask_restful import Api
 

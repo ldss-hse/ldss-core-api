@@ -1,11 +1,11 @@
-from pathlib import Path
+"""
+Module responsible for creation of Flask instance and configuring it
+"""
 
 from dynaconf import FlaskDynaconf
 from flask import Flask
 from flask_cors import CORS
-from flask_pydantic_spec import FlaskPydanticSpec
 
-from core_api.constants import ROOT_PATH
 from core_api.extensions.database import init_db
 from core_api.extensions.pydantic_spec import PYDANTIC_VALIDATOR
 
@@ -18,6 +18,10 @@ def create_app() -> Flask:
 
 
 def configure_app(app: Flask):
+    """
+    configuring Flask application
+    :param app: Flask instance
+    """
     FlaskDynaconf(app, settings_files=["settings.toml", ".secrets.toml"])
 
     CORS(app)
@@ -28,6 +32,9 @@ def configure_app(app: Flask):
 
 
 def register_api_blueprints(app):
+    """registering all Flask application blueprints"""
+
+    # pylint: disable=import-outside-toplevel
     from core_api.main.api.v1 import V1_API_BLUEPRINT
     from core_api.main.api.root import V1_ROOT_API_BLUEPRINT
 

@@ -1,3 +1,7 @@
+"""
+Example of creating background tasks
+"""
+
 import os
 from contextlib import closing
 from time import sleep
@@ -6,42 +10,49 @@ from huey import SqliteHuey
 from sqlalchemy.orm import declarative_base
 
 from core_api.extensions.database import get_db_for_asynchronous_task
-#
-from sqlalchemy import Column, Integer, String
 
 import core_api.extensions.database as db
 
-
 huey = SqliteHuey(filename='./db/huey.db')
-db.Base = declarative_base()
+db.BASE = declarative_base()
+
 
 @huey.task(context=True)
-def add(a, b, task=None):
+def add(task=None):
+    """
+    Example asynchronous task
+    :param task: current task instance
+    :return: result of task evaluation
+    """
     db_session = get_db_for_asynchronous_task()
+
+    # pylint: disable=import-outside-toplevel
     try:
-        db.Base.query
+        db.BASE.query
     except AttributeError:
-        db.Base.query = db_session.query_property()
+        db.BASE.query = db_session.query_property()
     finally:
         from core_api.main.models import TasksModel
+    # pylint: enable=import-outside-toplevel
 
     with closing(db_session) as session:
-        accuracy_job = session.query(TasksModel).get(1)
-        print(accuracy_job)
+        task = session.query(TasksModel).get(1)
+        print(task)
         print('In task!!!')
         print(f'kill me please by kill -9 {os.getpid()}')
-        print(f'B is {b}')
         sleep(2)
-        accuracy_job: TasksModel = session.query(TasksModel).get(1)
-        if accuracy_job.is_cancelled:
+
+        task: TasksModel = session.query(TasksModel).get(1)
+        if task.is_cancelled:
             print('Task is cancelled!!!')
             return -1
+
         print('Task is hard!!!')
-        print(f'After: B is {b}')
         sleep(30)
+
         print('Task is very hard!!!')
         sleep(30)
+
         print('Task is very very hard!!!')
-        print(dir(task))
         print(task)
-        return a
+        return 0

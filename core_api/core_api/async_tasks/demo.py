@@ -4,7 +4,9 @@ Example of creating background tasks
 
 import os
 from contextlib import closing
+from pathlib import Path
 from time import sleep
+import toml
 
 from huey import SqliteHuey
 from sqlalchemy.orm import declarative_base
@@ -13,14 +15,21 @@ from core_api.extensions.database import get_db_for_asynchronous_task
 
 import core_api.extensions.database as db
 
-huey = SqliteHuey(filename='./db/huey.db')
+config_path = Path(__file__).parent.parent / 'settings.toml'
+dev_config = toml.load(config_path)
+huey_db_path = Path(__file__).parent.parent / dev_config['development']['DATABASE_DIR'] / 'huey.db'
+
+print(f'DB Name: {huey_db_path}')
+
+huey = SqliteHuey(filename=str(huey_db_path))
 db.BASE = declarative_base()
 
 
 @huey.task(context=True)
-def add(task=None):
+def add(task=None, task_id=None):
     """
     Example asynchronous task
+    :param task_id: current task DB ID
     :param task: current task instance
     :return: result of task evaluation
     """
@@ -36,7 +45,7 @@ def add(task=None):
     # pylint: enable=import-outside-toplevel
 
     with closing(db_session) as session:
-        task = session.query(TasksModel).get(1)
+        task = session.query(TasksModel).get(task_id)
         print(task)
         print('In task!!!')
         print(f'kill me please by kill -9 {os.getpid()}')

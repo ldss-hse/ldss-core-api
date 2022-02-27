@@ -6,3 +6,4 @@ flask-restful==0.3.9
 flask-sqlalchemy==2.5.1
 huey==2.4.3
 pydantic==1.9.0
+toml==0.10.2

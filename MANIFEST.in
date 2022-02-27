@@ -1,0 +1,4 @@
+graft core_api/core_api/templates
+include core_api/core_api/.secrets.toml
+include core_api/core_api/settings.toml
+global-exclude *.pyc

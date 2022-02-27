@@ -51,7 +51,7 @@ def post():
         'taskID': task.id
     }
 
-    add()
+    add(task_id=task.id)
 
     time.sleep(0.1)
 

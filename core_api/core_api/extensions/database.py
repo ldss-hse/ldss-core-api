@@ -39,8 +39,10 @@ def get_db_for_asynchronous_task() -> scoped_session:
     fake_app = FakeFlaskApp()
     FlaskDynaconf(app=fake_app, settings_files=["settings.toml", ".secrets.toml"])
 
+    root_path = Path(__file__).parent.parent
+    uri = fake_app.config.SQLALCHEMY_DATABASE_URI.replace('sqlite:///', f'sqlite:///{str(root_path)}/')
     # pylint: disable=no-member
-    db_engine = create_engine(fake_app.config.SQLALCHEMY_DATABASE_URI, poolclass=NullPool)
+    db_engine = create_engine(url=uri, poolclass=NullPool)
 
     return scoped_session(sessionmaker(autocommit=False, bind=db_engine))
 

@@ -10,3 +10,7 @@ __pycache__
 
 # Application generated
 db
+
+# Distribution as wheels
+dist/
+*.egg-info/

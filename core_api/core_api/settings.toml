@@ -1,0 +1,11 @@
+name = "CORE API Flask Application Settings"
+
+[default]
+DEBUG = false
+
+[development]
+DATABASE_DIR = 'db/'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///db/main.db'
+
+[production]
+DB_URI = 'not specified'

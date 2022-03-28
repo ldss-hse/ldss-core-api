@@ -5,7 +5,10 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from constants import SCRIPTS_PATH, ARTIFACTS_PATH
+from pydantic import validate_model
+
+from core_api.constants import ARTIFACTS_PATH
+from core_api.main.api.v1.schemas.decision_making_task import TaskResult, DMTaskCreateResponseMessage
 
 
 class DecisionMakerCrashedError(Exception):
@@ -26,7 +29,7 @@ class CLIExecutableEnum(enum.Enum):
         return mapping[self]
 
 
-def run_console_tool(tool_path: Path, exe: CLIExecutableEnum = CLIExecutableEnum.bash, *args, **kwargs):
+def _run_console_tool(tool_path: Path, exe: CLIExecutableEnum = CLIExecutableEnum.bash, *args, **kwargs):
     kwargs_processed = []
     for item in kwargs.items():
         if item[0] in ('env', 'debug'):
@@ -51,23 +54,23 @@ def run_console_tool(tool_path: Path, exe: CLIExecutableEnum = CLIExecutableEnum
     return subprocess.run(options, capture_output=True)
 
 
-def run_jar():
+def _run_jar(scripts_path: Path, job_artifacts_path: Path):
     if platform.system() == 'Windows':
-        tool_path = SCRIPTS_PATH / 'run_decision_maker.ps1'
+        tool_path = scripts_path / 'run_decision_maker.ps1'
         exe = CLIExecutableEnum.powershell
     else:
-        tool_path = SCRIPTS_PATH / 'run_decision_maker.sh'
+        tool_path = scripts_path / 'run_decision_maker.sh'
         exe = CLIExecutableEnum.bash
 
-    jar_path = SCRIPTS_PATH / 'bin' / 'lingvo-dss-all.jar'
-    json_path = SCRIPTS_PATH / 'bin' / 'description_multilevel.json'
+    jar_path = scripts_path / 'bin' / 'lingvo-dss-all.jar'
+    json_path = scripts_path / 'bin' / 'description_multilevel.json'
 
     arguments = [
         '-JAR_PATH', str(jar_path),
         '-INPUT_JSON', str(json_path),
-        '-OUTPUT_DIR', str(ARTIFACTS_PATH)
+        '-OUTPUT_DIR', str(job_artifacts_path)
     ]
-    res_process = run_console_tool(tool_path, exe, *arguments, debug=True)
+    res_process = _run_console_tool(tool_path, exe, *arguments, debug=True)
     stdout = str(res_process.stdout.decode("utf-8"))
     print(f'SUBPROCESS: {stdout}')
     print(f'SUBPROCESS: {str(res_process.stderr.decode("utf-8"))}')
@@ -82,17 +85,21 @@ def parse_results(json_path: Path):
     return res
 
 
-def main():
-    if ARTIFACTS_PATH.exists():
-        shutil.rmtree(ARTIFACTS_PATH)
+def run_decision_maker(task_id: int):
+    parent_path = Path(__file__).parent
+    scripts_path = parent_path / 'scripts'
+    job_artifacts_path = ARTIFACTS_PATH / str(task_id)
 
-    run_jar()
+    if job_artifacts_path.exists():
+        shutil.rmtree(job_artifacts_path)
+
+    _run_jar(scripts_path=scripts_path, job_artifacts_path=job_artifacts_path)
 
     json_path = ARTIFACTS_PATH / 'result.json'
     parsed_results = parse_results(json_path)
 
-    print(parsed_results)
+    return parsed_results
 
 
 if __name__ == '__main__':
-    main()
+    run_decision_maker(1)

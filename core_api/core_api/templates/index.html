@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
             crossorigin="anonymous"></script>
+    <script type="text/javascript" src="data.json"></script>
 </head>
 
 <script>
@@ -50,6 +51,31 @@
             });
     }
 
+    function postNewMakeDecisionTask() {
+        const task_description = JSON.parse(data);
+        const payload = {
+            task_description
+        };
+        const config = {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: {
+                "content-type": "application/json"
+            }
+        };
+        fetch(`${apiURL}/make-decision`, config)
+            .then((res) => res.json())
+            .then((res) => {
+                const prettyJSON = JSON.stringify(res, null, 2);
+                const makeDecisionResultField = document.getElementById('makeDecisionResultField');
+                makeDecisionResultField.innerHTML = prettyJSON;
+            })
+            .catch((err) => {
+                const makeDecisionResultField = document.getElementById('makeDecisionResultField');
+                makeDecisionResultField.innerHTML = 'Error! ' + err;
+            });
+    }
+
     function init() {
         const acknowledgeButton = document.getElementById('acknowledgeButton');
         const createNewTaskButton = document.getElementById('createNewTaskButton');
@@ -62,6 +88,11 @@
         createNewTaskButton.addEventListener('click', function (event) {
             event.preventDefault();
             postNewTask();
+        });
+
+        makeDecisionButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            postNewMakeDecisionTask();
         });
     }
 </script>
@@ -136,6 +167,36 @@
                 <span class="input-group-text">Result</span>
             </div>
             <textarea class="form-control" aria-label="With textarea" id="createNewTaskResultField"></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="card card-for-poc">
+    <h5 class="card-header">Run decision making</h5>
+    <div class="card-body">
+        <h5 class="card-title">Create a new task</h5>
+        <p class="card-text">Running heavy backend task.</p>
+        <div class="input-group ack-result">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Request payload</span>
+            </div>
+            <textarea class="form-control" aria-label="With textarea"
+                      id="makeDecisionRequestPayloadField">{ "name": "make decision" }</textarea>
+        </div>
+        <button type="button" class="btn btn-outline-primary" id="makeDecisionButton">Create</button>
+        <div class="progress-block in-card-element-margins">
+            <div class="progress" style="height: 20px; display: none">
+                <div class="progress-bar" style="width: 0%;" id="makeDecisionProgressBar" role="progressbar"
+                     aria-valuenow=""
+                     aria-valuemin="0"
+                     aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div class="input-group ack-result">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Result</span>
+            </div>
+            <textarea class="form-control" aria-label="With textarea" id="makeDecisionResultField"></textarea>
         </div>
     </div>
 </div>

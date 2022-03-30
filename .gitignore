@@ -10,6 +10,7 @@ __pycache__
 
 # Application generated
 db
+artifacts
 
 # Distribution as wheels
 dist/

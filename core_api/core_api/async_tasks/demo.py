@@ -19,8 +19,6 @@ config_path = Path(__file__).parent.parent / 'settings.toml'
 dev_config = toml.load(config_path)
 huey_db_path = Path(__file__).parent.parent / dev_config['development']['DATABASE_DIR'] / 'huey.db'
 
-print(f'DB Name: {huey_db_path}')
-
 huey = SqliteHuey(filename=str(huey_db_path))
 db.BASE = declarative_base()
 

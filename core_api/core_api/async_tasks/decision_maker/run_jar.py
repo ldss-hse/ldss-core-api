@@ -7,7 +7,7 @@ from pathlib import Path
 
 from pydantic import validate_model
 
-from core_api.constants import ARTIFACTS_PATH
+from core_api.constants import ARTIFACTS_PATH, DESCRIPTION_JSON_NAME
 from core_api.main.api.v1.schemas.decision_making_task import TaskResult, DMTaskCreateResponseMessage
 
 
@@ -47,7 +47,7 @@ def _run_console_tool(tool_path: Path, exe: CLIExecutableEnum = CLIExecutableEnu
     ])
 
     if kwargs.get('debug', False):
-        print(f'Attempting to run with the following arguments: {options}')
+        print(f'Attempting to run with the following arguments: {" ".join(options)}')
 
     if kwargs.get('env'):
         return subprocess.run(options, capture_output=True, env=kwargs.get('env'))
@@ -63,7 +63,7 @@ def _run_jar(scripts_path: Path, job_artifacts_path: Path):
         exe = CLIExecutableEnum.bash
 
     jar_path = scripts_path / 'bin' / 'lingvo-dss-all.jar'
-    json_path = scripts_path / 'bin' / 'description_multilevel.json'
+    json_path = job_artifacts_path / DESCRIPTION_JSON_NAME
 
     arguments = [
         '-JAR_PATH', str(jar_path),
@@ -80,6 +80,7 @@ def _run_jar(scripts_path: Path, job_artifacts_path: Path):
 
 
 def parse_results(json_path: Path):
+    print('In parsing results')
     with json_path.open(encoding='utf-8') as f:
         res = json.load(f)
     return res
@@ -90,12 +91,9 @@ def run_decision_maker(task_id: int):
     scripts_path = parent_path / 'scripts'
     job_artifacts_path = ARTIFACTS_PATH / str(task_id)
 
-    if job_artifacts_path.exists():
-        shutil.rmtree(job_artifacts_path)
-
     _run_jar(scripts_path=scripts_path, job_artifacts_path=job_artifacts_path)
 
-    json_path = ARTIFACTS_PATH / 'result.json'
+    json_path = job_artifacts_path / 'result.json'
     parsed_results = parse_results(json_path)
 
     return parsed_results

@@ -1,62 +1,44 @@
-# ldss-core-api
+# `ldss-core-api`: REST API for Linguistic multi-level decision-making
 
-## Development
+This component is distributed as a [Docker image](https://hub.docker.com/r/demid5111/ldss-core-api)
 
-1. Running flake8:
+There are several ways to use the API:
 
-   ```bash
-   python -m flake8
-   ```
-
-1. Running pylint:
-
-   ```bash
-   pylint app.py config.py core_api/
-   ```
-
-## Deployment
-
-1. Build wheels:
-
-   ```bash
-   python -m build
-   ```
-
-1. Install locally (optional) to check:
-
-   ```bash
-   pip install -e .
-   ```
+1. [Building and running from sources](./CONTRIBUTING.md)
+2. Running as a PyPi package (currently WIP)
+3. [Building and running as a local Docker container](./CONTRIBUTING.md)
+4. [Pulling and running released Docker image (recommended)](#pull)
+5. Accessing a remotely started Docker container (currently not available)
    
-   OR
-   
+## Pulling and running released Docker image (recommended) <a name="pull></a>
+
+1. Install Docker Desktop on your system ([official instructions](https://docs.docker.com/desktop/))
+2. Pull the image:
    ```bash
-   pip install --force-reinstall dist/core_api_flask_seed-0.0.1-py3-none-any.whl
+   docker pull demid5111/ldss-core-api:0.3
    ```
-
-1. Export needed variables (optional) to check:
-   
+3. Run the image:
    ```bash
-   export FLASK_APP=core_api
-   export FLASK_ENV=development
+   docker run -p 1234:5000 --name core_api -it demid5111/ldss-core-api:0.3
    ```
+4. Proceed to section **Working with Decision Maker as a service** with `127.0.0.1:1234` as a service URL
 
-1. Run (optional) to check:
 
-   ```bash
-   flask run
-   ```
-   
-## Running from sources
+## Working with Decision Maker as a service
 
-1. Run the web server:
+You need to make a request to the URL where it is running, for example for local use case you need to send
+POST request to `http://localhost:1234/api/v1/make-decision` and as a payload send a dictionary:
 
-   ```bash
-   python core_api/core_api/app.py
-   ```
+```json
+{
+   "task_description": <HERE GOES JSON with description>
+}
+```
 
-1. Run task executor:
+Example of such a JSON file is present in 
+[./core_api/core_api/async_tasks/decision_maker/scripts/bin/description_multilevel.json](./core_api/core_api/async_tasks/decision_maker/scripts/bin/description_multilevel.json).
 
-   ```bash
-   python core_api/core_api/async_tasks/huey_consumer.py
-   ```
+Example Python code that demonstrates how to make a request is present in 
+[./core_api/demo/demo_request.py](./core_api/demo/demo_request.py), example Javascript code is present in
+[./core_api/core_api/templates/index.html)](./core_api/core_api/templates/index.html) 
+(function`postNewMakeDecisionTask`).

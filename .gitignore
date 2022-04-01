@@ -12,6 +12,9 @@ __pycache__
 db
 artifacts
 
+# Application 3rd party binaries
+core_api/core_api/async_tasks/decision_maker/scripts/bin/*.jar
+
 # Distribution as wheels
 dist/
 *.egg-info/

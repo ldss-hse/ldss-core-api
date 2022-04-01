@@ -14,7 +14,6 @@ from core_api.extensions.database import init_db
 from core_api.extensions.pydantic_spec import PYDANTIC_VALIDATOR
 
 os.environ['PROJECT_ROOT_FOR_DYNACONF'] = str(Path(__file__).parent)
-print(f'HEY: PROJECT_ROOT_FOR_DYNACONF: {os.environ["PROJECT_ROOT_FOR_DYNACONF"]}')
 
 
 def instantiate_app() -> Flask:
@@ -29,11 +28,7 @@ def configure_app(app: Flask):
     configuring Flask application
     :param app: Flask instance
     """
-    print(f'Flask config before loading settings: {app.config}')
-    print(f'Flask config before loading settings: {dir(app.config)}')
     FlaskDynaconf(app, settings_files=["settings.toml", ".secrets.toml"])
-    print(f'Flask config after loading settings: {app.config}')
-    print(f'Flask config before loading settings: {dir(app.config)}')
 
     CORS(app)
 
@@ -56,9 +51,6 @@ def register_api_blueprints(app):
 
 
 def create_app():
-    print('Creating app!!!!')
-    print(f'Current directory: {Path(__file__)}')
-
     if ARTIFACTS_PATH.exists():
         shutil.rmtree(ARTIFACTS_PATH)
 

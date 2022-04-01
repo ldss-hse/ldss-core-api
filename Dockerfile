@@ -1,16 +1,20 @@
 # syntax=docker/dockerfile:1
 
 FROM python:3.8-slim-buster
-ENV WORKING_DIRECTORY=/api
+ENV DECISION_MAKER_JAR_URL=https://github.com/ldss-hse/ldss-core-aggregator/releases/download/decision_maker_v0.3/lingvo-dss-all.jar
+ENV JAVA_PATH=/opt/java
+ENV JDK_URL=https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
 ENV VIRTUAL_ENV=$WORKING_DIRECTORY/venv
+ENV WORKING_DIRECTORY=/api
+ENV FLASK_ENV=production
 
-ENV PATH=$PATH:/opt/java/jdk-17.0.2/bin
-
-COPY build.sh .
+ENV PATH=$PATH:${JAVA_PATH}/jdk-17.0.2/bin
 
 RUN  apt  --yes update &&  apt --yes upgrade && apt install --yes curl
-RUN chmod +x build.sh && \
-    ./build.sh
+
+RUN mkdir ${JAVA_PATH}
+
+RUN curl $JDK_URL | tar -xz -C ${JAVA_PATH}
 
 COPY requirements.txt api/requirements.txt
 COPY requirements_dev.txt api/requirements_dev.txt
@@ -33,5 +37,7 @@ RUN echo $PYTHONPATH
 RUN java --version
 
 COPY core_api/ core_api/
+RUN curl -L $DECISION_MAKER_JAR_URL \
+            -o core_api/core_api/async_tasks/decision_maker/scripts/bin/lingvo-dss-all.jar
 
 CMD [ "python", "core_api/core_api/app.py"]

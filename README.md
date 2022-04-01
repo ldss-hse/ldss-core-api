@@ -49,13 +49,20 @@
    
 ## Running from sources
 
-1. Run the web server:
+1. Clone the repository
+
+2. Download the released version of the Decision Maker, currently supported version is 
+   `https://github.com/ldss-hse/ldss-core-aggregator/releases/download/decision_maker_v0.3/lingvo-dss-all.jar` 
+   and put it into 
+   `core_api/core_api/async_tasks/decision_maker/scripts/bin/` folder.
+
+3. Run the web server:
 
    ```bash
    python core_api/core_api/app.py
    ```
 
-1. Run task executor:
+4. Run task executor:
 
    ```bash
    python core_api/core_api/async_tasks/huey_consumer.py

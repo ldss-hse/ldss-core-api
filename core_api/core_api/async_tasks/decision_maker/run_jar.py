@@ -47,7 +47,7 @@ def _run_console_tool(tool_path: Path, exe: CLIExecutableEnum = CLIExecutableEnu
     ])
 
     if kwargs.get('debug', False):
-        print(f'Attempting to run with the following arguments: {options}')
+        print(f'Attempting to run with the following arguments: {" ".join(options)}')
 
     if kwargs.get('env'):
         return subprocess.run(options, capture_output=True, env=kwargs.get('env'))
@@ -80,6 +80,7 @@ def _run_jar(scripts_path: Path, job_artifacts_path: Path):
 
 
 def parse_results(json_path: Path):
+    print('In parsing results')
     with json_path.open(encoding='utf-8') as f:
         res = json.load(f)
     return res

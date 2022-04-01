@@ -60,3 +60,47 @@
    ```bash
    python core_api/core_api/async_tasks/huey_consumer.py
    ```
+
+## Running as a local Docker container
+
+1. Build fresh image:
+   ```bash
+    docker build --tag core_api .
+   ```
+   If you want to debug your build, make sure you have disabled a setting in Docker Desktop:
+   ```json
+   {
+      "features": {
+          "buildkit": false
+      }  
+   }
+   ```
+
+2. Run image by creating a container:
+   ```bash
+   docker run -p 1234:5000 -it core_api
+   ```
+
+3. Debug container during the build
+   ```bash
+   docker run --rm -it 94048487087a bash
+   ```
+   
+## Working with Decision Maker as a service
+
+You need to make a request to the URL where it is running, for example for local use case you need to send
+POST request to `http://localhost:1234/api/v1/make-decision` and as a payload send a dictionary:
+
+```json
+{
+   "task_description": <HERE GOES JSON with description>
+}
+```
+
+Example of such a JSON file is present in 
+[./core_api/core_api/async_tasks/decision_maker/scripts/bin/description_multilevel.json](./core_api/core_api/async_tasks/decision_maker/scripts/bin/description_multilevel.json).
+
+Example Python code that demonstrates how to make a request is present in 
+[./core_api/demo/demo_request.py](./core_api/demo/demo_request.py), example Javascript code is present in
+[./core_api/core_api/templates/index.html)](./core_api/core_api/templates/index.html) 
+(function`postNewMakeDecisionTask`).

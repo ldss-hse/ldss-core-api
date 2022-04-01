@@ -1,98 +1,29 @@
-# ldss-core-api
+# `ldss-core-api`: REST API for Linguistic multi-level decision-making
 
-## Development
+This component is distributed as a [Docker image](https://hub.docker.com/r/demid5111/ldss-core-api)
 
-1. Running flake8:
+There are several ways to use the API:
 
-   ```bash
-   python -m flake8
-   ```
-
-1. Running pylint:
-
-   ```bash
-   pylint app.py config.py core_api/
-   ```
-
-## Deployment
-
-1. Build wheels:
-
-   ```bash
-   python -m build
-   ```
-
-1. Install locally (optional) to check:
-
-   ```bash
-   pip install -e .
-   ```
+1. [Building and running from sources](./CONTRIBUTING.md)
+2. Running as a PyPi package (currently WIP)
+3. [Building and running as a local Docker container](./CONTRIBUTING.md)
+4. [Pulling and running released Docker image (recommended)](#pull)
+5. Accessing a remotely started Docker container (currently not available)
    
-   OR
-   
+## Pulling and running released Docker image (recommended) <a name="pull></a>
+
+1. Install Docker Desktop on your system ([official instructions](https://docs.docker.com/desktop/))
+2. Pull the image:
    ```bash
-   pip install --force-reinstall dist/core_api_flask_seed-0.0.1-py3-none-any.whl
+   docker pull demid5111/ldss-core-api:0.3
    ```
-
-1. Export needed variables (optional) to check:
-   
+3. Run the image:
    ```bash
-   export FLASK_APP=core_api
-   export FLASK_ENV=development
+   docker run -p 1234:5000 --name core_api -it demid5111/ldss-core-api:0.3
    ```
+4. Proceed to section **Working with Decision Maker as a service** with `127.0.0.1:1234` as a service URL
 
-1. Run (optional) to check:
 
-   ```bash
-   flask run
-   ```
-   
-## Running from sources
-
-1. Clone the repository
-
-2. Download the released version of the Decision Maker, currently supported version is 
-   `https://github.com/ldss-hse/ldss-core-aggregator/releases/download/decision_maker_v0.3/lingvo-dss-all.jar` 
-   and put it into 
-   `core_api/core_api/async_tasks/decision_maker/scripts/bin/` folder.
-
-3. Run the web server:
-
-   ```bash
-   python core_api/core_api/app.py
-   ```
-
-4. Run task executor:
-
-   ```bash
-   python core_api/core_api/async_tasks/huey_consumer.py
-   ```
-
-## Running as a local Docker container
-
-1. Build fresh image:
-   ```bash
-    docker build --tag core_api .
-   ```
-   If you want to debug your build, make sure you have disabled a setting in Docker Desktop:
-   ```json
-   {
-      "features": {
-          "buildkit": false
-      }  
-   }
-   ```
-
-2. Run image by creating a container:
-   ```bash
-   docker run -p 1234:5000 -it core_api
-   ```
-
-3. Debug container during the build
-   ```bash
-   docker run --rm -it 94048487087a bash
-   ```
-   
 ## Working with Decision Maker as a service
 
 You need to make a request to the URL where it is running, for example for local use case you need to send

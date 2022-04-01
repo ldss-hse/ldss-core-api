@@ -10,7 +10,9 @@ ENV FLASK_ENV=production
 
 ENV PATH=$PATH:${JAVA_PATH}/jdk-17.0.2/bin
 
-RUN  apt  --yes update &&  apt --yes upgrade && apt install --yes curl
+RUN apt --yes update && \
+    apt --yes upgrade && \
+    apt install --yes curl
 
 RUN mkdir ${JAVA_PATH}
 

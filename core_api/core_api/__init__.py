@@ -2,12 +2,14 @@
 Module responsible for creation of Flask instance and configuring it
 """
 import os
+import shutil
 from pathlib import Path
 
 from dynaconf import FlaskDynaconf
 from flask import Flask
 from flask_cors import CORS
 
+from core_api.constants import ARTIFACTS_PATH
 from core_api.extensions.database import init_db
 from core_api.extensions.pydantic_spec import PYDANTIC_VALIDATOR
 
@@ -56,6 +58,10 @@ def register_api_blueprints(app):
 def create_app():
     print('Creating app!!!!')
     print(f'Current directory: {Path(__file__)}')
+
+    if ARTIFACTS_PATH.exists():
+        shutil.rmtree(ARTIFACTS_PATH)
+
     app = instantiate_app()
     configure_app(app)
     register_api_blueprints(app)

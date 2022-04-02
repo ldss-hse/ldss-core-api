@@ -8,6 +8,7 @@ from core_api.constants import CORE_PATH
 
 def main():
     host_to_call = 'http://localhost:1234'
+    host_to_call = 'https://ldss-core-api-app.herokuapp.com/'
     api_endpoint = '/api/v1/make-decision'
     url_to_call = f'{host_to_call}{api_endpoint}'
     print(f'Calling {url_to_call}')

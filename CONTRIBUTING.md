@@ -123,10 +123,12 @@
    ```
 3. `heroku container:login`
 4. `heroku create`
-5. `docker tag demid5111/ldss-core-api:0.3 registry.heroku.com/pumpkin-sundae-08613/web`
-6. `docker push registry.heroku.com/pumpkin-sundae-08613/web`
-7. `heroku container:release web --app=pumpkin-sundae-08613`
+5. `docker tag demid5111/ldss-core-api:0.3 registry.heroku.com/ldss-core-api-app/web`
+6. `docker push registry.heroku.com/ldss-core-api-app/web`
+7. `heroku container:release web --app=ldss-core-api-app`
 
-To see URL of application: `heroku domains --app pumpkin-sundae-08613`.
+To see URL of application: `heroku domains --app ldss-core-api-app`.
 
-To see logs of application: `heroku logs --app pumpkin-sundae-08613`.
+To see logs of application: `heroku logs --app ldss-core-api-app`.
+
+To enter remote machine: `heroku run bash -app ldss-core-api-app`.

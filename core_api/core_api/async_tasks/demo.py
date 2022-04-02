@@ -11,14 +11,15 @@ import toml
 from huey import SqliteHuey
 from sqlalchemy.orm import declarative_base
 
+from core_api.constants import CORE_PATH
 from core_api.extensions.database import get_db_for_asynchronous_task
 
 import core_api.extensions.database as db
 
 config_path = Path(__file__).parent.parent / 'settings.toml'
 dev_config = toml.load(config_path)
-huey_db_path = Path(__file__).parent.parent / dev_config['development']['DATABASE_DIR'] / 'huey.db'
-
+huey_db_path = CORE_PATH.parent / dev_config['development']['DATABASE_DIR'] / 'huey.db'
+print(f'Creating task scheduler DB in {huey_db_path}')
 huey = SqliteHuey(filename=str(huey_db_path))
 db.BASE = declarative_base()
 

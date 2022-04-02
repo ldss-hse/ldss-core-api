@@ -5,8 +5,8 @@ DEBUG = false
 
 [development]
 DATABASE_DIR = 'db/'
-SQLALCHEMY_DATABASE_URI = 'sqlite:///db/main.db'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///<PATH>/db/main.db'
 
 [production]
 DATABASE_DIR = 'db/'
-SQLALCHEMY_DATABASE_URI = 'sqlite:///db/main.db'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///<PATH>/db/main.db'

@@ -97,7 +97,6 @@
    docker run --rm -it 94048487087a bash
    ```
 
-
 ### Publishing Docker image
 
 1. Build an image based on instructions above
@@ -132,3 +131,8 @@ To see URL of application: `heroku domains --app ldss-core-api-app`.
 To see logs of application: `heroku logs --app ldss-core-api-app`.
 
 To enter remote machine: `heroku run bash -app ldss-core-api-app`.
+
+To deploy: [link](https://stackoverflow.com/questions/71892543/heroku-and-github-items-could-not-be-retrieved-internal-server-error)
+
+1. `heroku git:remote -a ldss-core-api-app`
+2. `git push heroku main:main`

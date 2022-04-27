@@ -134,3 +134,5 @@ To enter remote machine: `heroku run bash -app ldss-core-api-app`.
 
 To deploy: [link](https://stackoverflow.com/questions/71892543/heroku-and-github-items-could-not-be-retrieved-internal-server-error)
 
+1. `heroku git:remote -a ldss-core-api-app`
+2. `git push heroku main:main`

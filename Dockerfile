@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 FROM python:3.8-slim-buster
-ENV DECISION_MAKER_JAR_URL=https://github.com/ldss-hse/ldss-core-aggregator/releases/download/decision_maker_v0.4/lingvo-dss-all.jar
+ENV DECISION_MAKER_JAR_URL=https://github.com/ldss-hse/ldss-core-aggregator/releases/download/decision_maker_v0.8/lingvo-dss-all.jar
 ENV JAVA_PATH=/opt/java
 ENV JDK_URL=https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
 ENV VIRTUAL_ENV=$WORKING_DIRECTORY/venv

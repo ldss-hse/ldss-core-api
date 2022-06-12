@@ -35,6 +35,8 @@ class ScalesDescription:
                            title='Name of scale')
     labels: List[str] = Field(...,
                               title='List of labels for the given linguistic scale')
+    values: Optional[List[str]] = Field(
+        title='List of values for the given linguistic scale if it does not use fuzzy logic')
 
 
 @dataclass

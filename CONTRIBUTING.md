@@ -5,7 +5,7 @@
 1. Clone the repository
 
 2. Download the released version of the Decision Maker, currently supported version is 
-   `https://github.com/ldss-hse/ldss-core-aggregator/releases/download/decision_maker_v0.3/lingvo-dss-all.jar` 
+   `https://github.com/ldss-hse/ldss-core-aggregator/releases/download/decision_maker_v0.8/lingvo-dss-all.jar` 
    and put it into 
    `core_api/core_api/async_tasks/decision_maker/scripts/bin/` folder.
 

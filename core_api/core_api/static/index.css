@@ -1,0 +1,17 @@
+.card-for-poc {
+    margin: 30px 20px 30px 20px;
+    height: 500px;
+}
+
+.ack-result {
+    margin: 30px 0 30px 0;
+    height: 110px;
+}
+
+.in-card-element-margins {
+    margin: 30px 0 30px 0;
+}
+
+.input-group-text {
+    height: 100%;
+}

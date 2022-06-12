@@ -30,7 +30,7 @@ def construct_payload_from_gold_pure_description(weights):
 
 
 def construct_payload_from_test_file(weights):
-    gold_asset_path = Path(r'C:\Users\demidovs\Downloads\testJSON2.json')
+    gold_asset_path = Path(r'C:\Users\demidovs\Downloads\testJSON1.json')
     if not gold_asset_path.exists():
         raise ValueError('Path to JSON file should exist')
 
@@ -59,8 +59,8 @@ def check_response(response_json, expected_weights):
 
 
 def main():
-    host_to_call = 'http://localhost:1234'
-    host_to_call = 'https://ldss-core-api-app.herokuapp.com'
+    host_to_call = 'http://localhost:5000'
+    # host_to_call = 'https://ldss-core-api-app.herokuapp.com'
     api_endpoint = '/api/v1/make-decision'
     url_to_call = f'{host_to_call}{api_endpoint}'
     print(f'Calling {url_to_call}')

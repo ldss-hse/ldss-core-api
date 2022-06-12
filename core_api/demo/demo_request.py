@@ -29,11 +29,7 @@ def construct_payload_from_gold_pure_description(weights):
     }
 
 
-def construct_payload_from_test_file(weights):
-    gold_asset_path = Path(r'C:\Users\demidovs\Downloads\testJSON1.json')
-    if not gold_asset_path.exists():
-        raise ValueError('Path to JSON file should exist')
-
+def construct_payload_from_test_file(weights, gold_asset_path):
     with gold_asset_path.open(encoding='utf-8') as f:
         payload = json.load(f)
 
@@ -55,12 +51,13 @@ def check_response(response_json, expected_weights):
     print(f'Received weights: {response_json["taskResult"]["expertWeightsRule"]}')
     err_msg = 'Weights are not the same. Does decision maker really consider a not hardcoded example?'
     assert response_json["taskResult"]["expertWeightsRule"] == expected_weights, err_msg
-    assert response_json["taskResult"]["alternativesOrdered"], 'Decision Maker cannot return empty list of alternatives'
+    assert response_json["taskResult"]["alternativesOrdered"], 'Decision Maker cannot return empty list of ordered ' \
+                                                               'alternatives'
 
 
 def main():
-    host_to_call = 'http://localhost:5000'
-    # host_to_call = 'https://ldss-core-api-app.herokuapp.com'
+    # host_to_call = 'http://localhost:5000'
+    host_to_call = 'https://ldss-core-api-app.herokuapp.com'
     api_endpoint = '/api/v1/make-decision'
     url_to_call = f'{host_to_call}{api_endpoint}'
     print(f'Calling {url_to_call}')
@@ -74,9 +71,15 @@ def main():
     print('Checks passed')
 
     print('Checking from test payload...')
+
+    gold_asset_path = Path(r'C:\Users\demidovs\Downloads\testJSON1.json')
+    if not gold_asset_path.exists():
+        print('[WARNING] If you want to try with your own test file, provide it first')
+        return
+
     weights = _create_random_weights()
     print(f'New weights: {weights}')
-    payload = construct_payload_from_test_file(weights=weights)
+    payload = construct_payload_from_test_file(weights=weights, gold_asset_path=gold_asset_path)
     result = make_request_to_service(url_to_call, payload)
     check_response(result, weights)
     print('Checks passed')
